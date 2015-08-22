@@ -1,0 +1,65 @@
+---
+title       : Regression model
+subtitle    : Course project    
+author      : Ilya Solopov
+job         : Home
+framework   : io2012        # {io2012, html5slides, shower, dzslides, ...}
+highlighter : highlight.js  # {highlight.js, prettify, highlight}
+hitheme     : tomorrow      # 
+widgets     : []            # {mathjax, quiz, bootstrap}
+mode        : selfcontained # {standalone, draft}
+knit        : slidify::knit2slides
+---
+
+## Problem
+There are following two questions:
+    1. Is an automatic or manual transmission better for MPG
+    2. Quantify the MPG difference between automatic and manual transmissions  
+First, load the mtcars data and see at the pairwise between all variables .
+```{r, echo=FALSE}
+data(mtcars)
+pairs(mtcars)
+```
+
+--- .class #id 
+
+## Is automatic or manual transmission better?  
+We plot a boxplot of MPG by transmission types (see appendix for plots).
+```{r,echo=FALSE}
+boxplot(mpg~am, data = mtcars,
+        xlab = "Transmission",
+        ylab = "Miles per Gallon",
+        main = "MPG by Transmission Type",
+        names = c("Automatic", "Manual"))
+```
+
+
+--- .class #id 
+
+## t-test  
+It seems that manual transmission is better in MPG than automatic.
+We then perform a t-test to confirm this hypothesis
+```{r,echo=FALSE}
+t.test(mtcars$mpg~mtcars$am,conf.level=0.95)
+```
+
+
+--- .class #id 
+
+## Quantify the difference between transmissions types  
+We do linear regression between mpg and am:
+```{r, echo=FALSE}
+reg = lm(data = mtcars, mpg ~ am)
+summary(reg)
+```
+
+--- .class #id 
+
+## Find another factors    
+We use automatic model-choosing function to find additional factors
+```{r, echo=FALSE}
+bestmodel = step(lm(data = mtcars, mpg ~ .), trace=0)
+summary(bestmodel)
+```
+
+
